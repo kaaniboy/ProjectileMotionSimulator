@@ -32,19 +32,17 @@ public class ControlsPanel extends JPanel {
 	// Instance fields for the various labels and buttons used in the
 	// ControlsPanel.
 	private JLabel angleLabel;
-	private JButton increaseSpeedButton;
-	private JButton increaseDamageButton;
-	private JLabel speedLabel;
-	private JLabel damageLabel;
-	private JLabel infoLabel;
+	private JLabel velocityLabel;
+	private JLabel heightLabel;
+	
+	private JTextField angleInput;
+	private JTextField velocityInput;
+	private JTextField heightInput;
 
 	private JLabel warningLabel;
 	private JLabel positionEquationLabel;
 	private JLabel velocityEquationLabel;
 	private JLabel accelerationEquationLabel;
-	
-	private JTextField angleInput;
-	private JTextField velocityInput;
 
 	private SimulationPanel simulationPanel;
 
@@ -75,7 +73,7 @@ public class ControlsPanel extends JPanel {
 
 		JPanel velocityPanel = new JPanel(new GridLayout(1, 2));
 
-		JLabel velocityLabel = new JLabel("Velocity (m/s): ");
+		velocityLabel = new JLabel("Velocity (m/s): ");
 
 		velocityPanel.add(velocityLabel);
 
@@ -85,6 +83,19 @@ public class ControlsPanel extends JPanel {
 		velocityPanel.add(velocityInput);
 
 		add(velocityPanel);
+		
+		JPanel heightPanel = new JPanel(new GridLayout(1, 2));
+
+		heightLabel = new JLabel("Height (m): ");
+
+		heightPanel.add(heightLabel);
+
+		heightInput = new JTextField("0");
+
+		heightPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, heightInput.getPreferredSize().height));
+		heightPanel.add(heightInput);
+
+		add(heightPanel);
 
 		add(Box.createRigidArea(new Dimension(0, 10)));
 		
@@ -107,10 +118,13 @@ public class ControlsPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String warning = validateInput();
 				
-				System.out.println(warning);
-				
 				if(warning == null) {
 					warningLabel.setVisible(false);
+					
+					double angle = Double.parseDouble(angleInput.getText());
+					double velocity = Double.parseDouble(velocityInput.getText());
+					simulationPanel.simulate(angle, velocity, 0);
+					
 				} else {
 					warningLabel.setVisible(true);
 					warningLabel.setText(warning);

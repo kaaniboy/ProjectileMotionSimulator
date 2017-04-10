@@ -9,26 +9,41 @@
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.awt.font.*;
+import java.text.DecimalFormat;
 
 import javax.swing.JPanel;
 
 public class SimulationPanel extends JPanel {
-	
-	//Calcuate the width for the GamePanel.
+
+	// Calcuate the width for the GamePanel.
 	public static final int WIDTH = GUI.SCREEN_WIDTH - ControlsPanel.WIDTH;
+
+	private static int GROUND_HEIGHT = 50;
+	private static int WIDTH_PADDING = 30;
+
+	private double angle;
+	private double velocity;
+	private double height;
+
+	private boolean hasStarted;
+	
+	private Font font;
 
 	public SimulationPanel() {
 		setPreferredSize(new Dimension(WIDTH, GUI.SCREEN_HEIGHT));
-		setBackground(Color.WHITE);
+		setBackground(new Color(30, 144, 255));
 		
-		
-		//Add the GameMouseListener to listen for mouse clicks and moves.
+		font = new Font("Comic Sans", Font.BOLD, 16);
+
+		// Add the GameMouseListener to listen for mouse clicks and moves.
 		addMouseListener(new GameMouseListener());
 		addMouseMotionListener(new GameMouseListener());
 	}
@@ -36,9 +51,83 @@ public class SimulationPanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+
+		Graphics2D g2 = (Graphics2D) g;
+
+		g2.setColor(new Color(50, 205, 50));
+
+		g2.fillRect(0, getHeight() - GROUND_HEIGHT, getWidth(), GROUND_HEIGHT);
+
+		if (!hasStarted)
+			return;
+
+		double duration = flightDuration();
+		double tick = duration / 1000;
+
+		double heightScale = (getHeight() - GROUND_HEIGHT) / (highestY() * 1.2);
+		double widthScale = (getWidth() - 2 * WIDTH_PADDING) / (getX(duration));
+
+		double scale = Math.min(heightScale, widthScale);
+
+		System.out.printf("Biggest X: %f\n", getX(duration));
+		System.out.printf("Highest Y: %f\n", highestY());
+		System.out.printf("Duration: %f\n", duration);
+		System.out.printf("Width Scale: %f\n", widthScale);
+		System.out.printf("Height Scale: %f\n", heightScale);
+
+		g2.setColor(Color.BLACK);
+
+		for (double t = 0; t < duration; t += tick) {
+			g2.fillOval((int) (WIDTH_PADDING + getX(t) * scale), getHeight()
+					- (int) (GROUND_HEIGHT + getY(t) * scale), 4, 4);
+		}
+		
+		g2.setColor(Color.RED);
+		
+		g2.fillOval((int) (WIDTH_PADDING + getX(duration) * scale), getHeight()
+				- (int) (GROUND_HEIGHT + getY(duration) * scale), 12, 12);
+		
+		DecimalFormat fmt = new DecimalFormat("0.00");
+		
+		g2.setColor(Color.BLACK);
+		g2.setFont(font);
+		
+		g2.drawString("Y: " + fmt.format(getX(duration)) + " m", 10, 20);
+		g2.drawString("X: " + fmt.format(getX(duration)) + " m", getWidth() - 85, getHeight() - 10);
 	}
 
-	//Private inner class that is used to handle mouse presses and mouse movements in the GamePanel.
+	public void simulate(double angle, double velocity, double height) {
+		hasStarted = true;
+
+		this.angle = (Math.PI / 180) * angle;
+		this.velocity = velocity;
+		this.height = height;
+
+		repaint();
+	}
+
+	private double getX(double time) {
+		return velocity * Math.cos(angle) * time;
+	}
+
+	private double getY(double time) {
+		return -0.5 * 9.81 * Math.pow(time, 2) + velocity * Math.sin(angle)
+				* time + height;
+	}
+
+	private double highestY() {
+		return getY(velocity * Math.sin(angle) / 9.81);
+	}
+
+	private double flightDuration() {
+		return (-1 * velocity * Math.sin(angle) - Math.sqrt(Math.pow(velocity
+				* Math.sin(angle), 2)
+				+ 2 * 9.81 * height))
+				/ (-9.81);
+	}
+
+	// Private inner class that is used to handle mouse presses and mouse
+	// movements in the GamePanel.
 	private class GameMouseListener extends MouseAdapter {
 
 		@Override
@@ -49,12 +138,12 @@ public class SimulationPanel extends JPanel {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			
+
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			
+
 		}
 	}
 }
