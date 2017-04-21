@@ -123,7 +123,9 @@ public class ControlsPanel extends JPanel {
 					
 					double angle = Double.parseDouble(angleInput.getText());
 					double velocity = Double.parseDouble(velocityInput.getText());
-					simulationPanel.simulate(angle, velocity, 0);
+					double height = Double.parseDouble(heightInput.getText());
+					
+					simulationPanel.simulate(angle, velocity, height);
 					
 				} else {
 					warningLabel.setVisible(true);
@@ -163,6 +165,7 @@ public class ControlsPanel extends JPanel {
 		try {
 			double angle = Double.parseDouble(angleInput.getText());
 			double velocity = Double.parseDouble(velocityInput.getText());
+			double height = Double.parseDouble(heightInput.getText());
 
 			if (angle <= 0 || angle >= 90) {
 				return "<html>The angle must be greater than 0 and less than 90 degrees.</html>";
@@ -171,10 +174,14 @@ public class ControlsPanel extends JPanel {
 			if (velocity <= 0) {
 				return "<html>The velocity must be greater than 0.</html>";
 			}
+			
+			if (height < 0) {
+				return "<html>The height cannot be negative.</html>";
+			}
 
 			return null;
 		} catch (Exception e) {
-			return "<html>Both the angle and velocity must be numbers.</html>";
+			return "<html>The angle, velocity, and height must be numbers.</html>";
 		}
 	}
 

@@ -1,3 +1,4 @@
+
 // Assignment: Honors Contract
 // Arizona State University CSE205
 // Name: Kaan Aksoy
@@ -23,7 +24,7 @@ import javax.swing.JPanel;
 
 public class SimulationPanel extends JPanel {
 
-	// Calcuate the width for the GamePanel.
+	// Calcuate the width for the GamePanel .
 	public static final int WIDTH = GUI.SCREEN_WIDTH - ControlsPanel.WIDTH;
 
 	private static int GROUND_HEIGHT = 50;
@@ -34,13 +35,13 @@ public class SimulationPanel extends JPanel {
 	private double height;
 
 	private boolean hasStarted;
-	
+
 	private Font font;
 
 	public SimulationPanel() {
 		setPreferredSize(new Dimension(WIDTH, GUI.SCREEN_HEIGHT));
 		setBackground(new Color(30, 144, 255));
-		
+
 		font = new Font("Comic Sans", Font.BOLD, 16);
 
 		// Add the GameMouseListener to listen for mouse clicks and moves.
@@ -75,23 +76,30 @@ public class SimulationPanel extends JPanel {
 		System.out.printf("Width Scale: %f\n", widthScale);
 		System.out.printf("Height Scale: %f\n", heightScale);
 
+		g2.setColor(Color.GRAY);
+
+		if (height > 0) {
+			g2.fillRect(WIDTH_PADDING, getHeight() - GROUND_HEIGHT - (int) (height * scale), 20,
+					(int) (height * scale));
+		}
+		
 		g2.setColor(Color.BLACK);
 
 		for (double t = 0; t < duration; t += tick) {
-			g2.fillOval((int) (WIDTH_PADDING + getX(t) * scale), getHeight()
-					- (int) (GROUND_HEIGHT + getY(t) * scale), 4, 4);
+			g2.fillOval((int) (WIDTH_PADDING + getX(t) * scale), getHeight() - (int) (GROUND_HEIGHT + getY(t) * scale),
+					4, 4);
 		}
-		
+
 		g2.setColor(Color.RED);
-		
-		g2.fillOval((int) (WIDTH_PADDING + getX(duration) * scale), getHeight()
-				- (int) (GROUND_HEIGHT + getY(duration) * scale), 12, 12);
-		
+
+		g2.fillOval((int) (WIDTH_PADDING + getX(duration) * scale),
+				getHeight() - (int) (GROUND_HEIGHT + getY(duration) * scale), 12, 12);
+
 		DecimalFormat fmt = new DecimalFormat("0.00");
-		
+
 		g2.setColor(Color.BLACK);
 		g2.setFont(font);
-		
+
 		g2.drawString("Y: " + fmt.format(getX(duration)) + " m", 10, 20);
 		g2.drawString("X: " + fmt.format(getX(duration)) + " m", getWidth() - 85, getHeight() - 10);
 	}
@@ -111,8 +119,7 @@ public class SimulationPanel extends JPanel {
 	}
 
 	private double getY(double time) {
-		return -0.5 * 9.81 * Math.pow(time, 2) + velocity * Math.sin(angle)
-				* time + height;
+		return -0.5 * 9.81 * Math.pow(time, 2) + velocity * Math.sin(angle) * time + height;
 	}
 
 	private double highestY() {
@@ -120,10 +127,8 @@ public class SimulationPanel extends JPanel {
 	}
 
 	private double flightDuration() {
-		return (-1 * velocity * Math.sin(angle) - Math.sqrt(Math.pow(velocity
-				* Math.sin(angle), 2)
-				+ 2 * 9.81 * height))
-				/ (-9.81);
+		return (-1 * velocity * Math.sin(angle)
+				- Math.sqrt(Math.pow(velocity * Math.sin(angle), 2) + 2 * 9.81 * height)) / (-9.81);
 	}
 
 	// Private inner class that is used to handle mouse presses and mouse
