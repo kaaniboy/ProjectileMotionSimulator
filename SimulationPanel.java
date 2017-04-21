@@ -13,12 +13,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.*;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
@@ -37,6 +41,16 @@ public class SimulationPanel extends JPanel {
 	private boolean hasStarted;
 
 	private Font font;
+
+	private ArrayList<Point> points = new ArrayList<Point>();
+	private int index = 0;
+
+	double duration = flightDuration();
+	double tick;
+
+	double widthScale;
+	double heightScale;
+	double scale;
 
 	public SimulationPanel() {
 		setPreferredSize(new Dimension(WIDTH, GUI.SCREEN_HEIGHT));
@@ -62,14 +76,6 @@ public class SimulationPanel extends JPanel {
 		if (!hasStarted)
 			return;
 
-		double duration = flightDuration();
-		double tick = duration / 1000;
-
-		double heightScale = (getHeight() - GROUND_HEIGHT) / (highestY() * 1.2);
-		double widthScale = (getWidth() - 2 * WIDTH_PADDING) / (getX(duration));
-
-		double scale = Math.min(heightScale, widthScale);
-
 		System.out.printf("Biggest X: %f\n", getX(duration));
 		System.out.printf("Highest Y: %f\n", highestY());
 		System.out.printf("Duration: %f\n", duration);
@@ -82,12 +88,13 @@ public class SimulationPanel extends JPanel {
 			g2.fillRect(WIDTH_PADDING, getHeight() - GROUND_HEIGHT - (int) (height * scale), 20,
 					(int) (height * scale));
 		}
-		
-		g2.setColor(Color.BLACK);
 
-		for (double t = 0; t < duration; t += tick) {
-			g2.fillOval((int) (WIDTH_PADDING + getX(t) * scale), getHeight() - (int) (GROUND_HEIGHT + getY(t) * scale),
-					4, 4);
+		g2.setColor(Color.BLACK);
+		
+		System.out.println("INDEX" + index);
+		
+		for(int i = 0; i <= index; i++) {
+			g2.fillOval(points.get(i).x, points.get(i).y, 4, 4);
 		}
 
 		g2.setColor(Color.RED);
@@ -110,6 +117,38 @@ public class SimulationPanel extends JPanel {
 		this.angle = (Math.PI / 180) * angle;
 		this.velocity = velocity;
 		this.height = height;
+
+		duration = flightDuration();
+		tick = duration / 1000;
+
+		heightScale = (getHeight() - GROUND_HEIGHT) / (highestY() * 1.2);
+		widthScale = (getWidth() - 2 * WIDTH_PADDING) / (getX(duration));
+
+		scale = Math.min(heightScale, widthScale);
+
+		points.clear();
+		index = 0;
+
+		for (double t = 0; t < duration; t += tick) {
+			points.add(new Point((int) (WIDTH_PADDING + getX(t) * scale),
+					getHeight() - (int) (GROUND_HEIGHT + getY(t) * scale)));
+		}
+
+		Timer timer = new Timer();
+		TimerTask myTask = new TimerTask() {
+			@Override
+			public void run() {
+				repaint();
+
+				index++;
+
+				if (index == points.size() - 1) {
+					timer.cancel();
+				}
+			}
+		};
+
+		timer.schedule(myTask, 0, 2);
 
 		repaint();
 	}
