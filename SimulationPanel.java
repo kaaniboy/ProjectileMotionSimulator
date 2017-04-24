@@ -66,6 +66,9 @@ public class SimulationPanel extends JPanel {
 		super.paintComponent(g);
 
 		Graphics2D g2 = (Graphics2D) g;
+		
+		g2.setFont(font);
+
 
 		g2.setColor(new Color(50, 205, 50));
 
@@ -91,8 +94,16 @@ public class SimulationPanel extends JPanel {
 		
 		System.out.println("INDEX" + index);
 		
+		boolean displayedMaxY = false;
+		
 		for(int i = 0; i <= index; i++) {
 			g2.fillOval(scaledPoints.get(i).x, scaledPoints.get(i).y, 4, 4);
+			
+			if(!displayedMaxY && Math.abs(points.get(i).y - highestY()) < 0.0001) {
+				displayedMaxY = true;
+				g2.drawString("Y: " + fmt.format(points.get(i).y) + "m", scaledPoints.get(i).x - 10, scaledPoints.get(i).y - 10);
+
+			}
 			
 			if(i == index) {
 				String x = fmt.format(points.get(i).x);
@@ -110,9 +121,8 @@ public class SimulationPanel extends JPanel {
 		DecimalFormat fmt = new DecimalFormat("0.00");
 
 		g2.setColor(Color.BLACK);
-		g2.setFont(font);
-
-		g2.drawString("Y: " + fmt.format(getX(duration)) + " m", 10, 20);
+		
+		//g2.drawString("Y: " + fmt.format(highestY() * 1.2) + " m", 10, 20);
 		
 		int xTextWidth = g2.getFontMetrics().stringWidth("X: " + fmt.format(getX(duration)) + " m");
 		
