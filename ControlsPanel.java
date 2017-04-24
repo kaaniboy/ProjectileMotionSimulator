@@ -17,11 +17,13 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -40,10 +42,10 @@ public class ControlsPanel extends JPanel {
 	private JTextField heightInput;
 
 	private JLabel warningLabel;
-	private JLabel positionEquationLabel;
-	private JLabel velocityEquationLabel;
-	private JLabel accelerationEquationLabel;
-
+	private JLabel distanceLabel;
+	private JLabel timeLabel;
+	private JLabel accelerationLabel;
+	
 	private SimulationPanel simulationPanel;
 
 	// Constant defining how wide the ControlsPanel should be.
@@ -54,9 +56,6 @@ public class ControlsPanel extends JPanel {
 		setPreferredSize(new Dimension(WIDTH, GUI.SCREEN_HEIGHT));
 
 		setBorder(new EmptyBorder(10, 10, 10, 10));
-
-		// Create the label showing money and set it to be centered
-		// horizontally.
 
 		JPanel anglePanel = new JPanel(new GridLayout(1, 2));
 
@@ -136,24 +135,22 @@ public class ControlsPanel extends JPanel {
 
 		add(runButton);
 
-		// Panel that contains the components necessary to upgrade turrets.
 		JPanel infoPanel = new JPanel();
 		infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-
-		// Put a border around the upgrades panel.
+		
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Simulation Info"));
 		
-		positionEquationLabel = new JLabel("x(t) = .5at^2 + vt + x0");
+		distanceLabel = new JLabel("Distance Traveled: ");
 		
-		infoPanel.add(positionEquationLabel);
+		infoPanel.add(distanceLabel);
 		
-		velocityEquationLabel = new JLabel("v(t) = at + v0");
+		timeLabel = new JLabel("Total Air Time: ");
 		
-		infoPanel.add(velocityEquationLabel);
-
-		accelerationEquationLabel = new JLabel("a(t) = a0");
+		infoPanel.add(timeLabel);
 		
-		infoPanel.add(accelerationEquationLabel);
+		accelerationLabel = new JLabel("Acceleration (g): 9.81 m/s^2");
+		
+		infoPanel.add(accelerationLabel);
 
 		add(Box.createRigidArea(new Dimension(0, 30)));
 
@@ -188,5 +185,12 @@ public class ControlsPanel extends JPanel {
 	// Setter for gamePanel.
 	public void setSimulationPanel(SimulationPanel panel) {
 		this.simulationPanel = panel;
+	}
+	
+	public void setSimulationInfo(double time, double distance) {
+		DecimalFormat fmt = new DecimalFormat("0.00");
+		
+		distanceLabel.setText("Distance Traveled: " + fmt.format(distance) + "m");
+		timeLabel.setText("Total Air Time: " + fmt.format(time) + "s");
 	}
 }

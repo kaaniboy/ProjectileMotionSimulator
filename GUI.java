@@ -34,7 +34,9 @@ public class GUI extends JFrame {
 		//Instantiate the two panels used in the GUI.
 		ControlsPanel controlsPanel = new ControlsPanel();
 		SimulationPanel simulationPanel = new SimulationPanel();
+		
 		controlsPanel.setSimulationPanel(simulationPanel);
+		simulationPanel.setControlsPanel(controlsPanel);
 		
 		//Use a BorderLayout to add the ControlsPanel to the left and the GamePanel to the right.
 		Container cont = getContentPane();

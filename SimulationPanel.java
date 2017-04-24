@@ -27,7 +27,9 @@ import java.util.TimerTask;
 import javax.swing.JPanel;
 
 public class SimulationPanel extends JPanel {
-
+	
+	private ControlsPanel controlsPanel;
+	
 	// Calcuate the width for the GamePanel .
 	public static final int WIDTH = GUI.SCREEN_WIDTH - ControlsPanel.WIDTH;
 
@@ -51,6 +53,8 @@ public class SimulationPanel extends JPanel {
 	double widthScale;
 	double heightScale;
 	double scale;
+	
+	Timer timer;
 
 	public SimulationPanel() {
 		setPreferredSize(new Dimension(WIDTH, GUI.SCREEN_HEIGHT));
@@ -61,6 +65,10 @@ public class SimulationPanel extends JPanel {
 		// Add the GameMouseListener to listen for mouse clicks and moves.
 		addMouseListener(new GameMouseListener());
 		addMouseMotionListener(new GameMouseListener());
+	}
+	
+	public void setControlsPanel(ControlsPanel panel) {
+		this.controlsPanel = panel;
 	}
 
 	@Override
@@ -133,8 +141,15 @@ public class SimulationPanel extends JPanel {
 			points.add(new Point((int) (WIDTH_PADDING + getX(t) * scale),
 					getHeight() - (int) (GROUND_HEIGHT + getY(t) * scale)));
 		}
-
-		Timer timer = new Timer();
+		
+		controlsPanel.setSimulationInfo(duration, getX(duration));
+		
+		if(timer != null) {
+			timer.cancel();
+		}
+		
+		timer = new Timer();
+		
 		TimerTask myTask = new TimerTask() {
 			@Override
 			public void run() {
@@ -144,6 +159,7 @@ public class SimulationPanel extends JPanel {
 
 				if (index == points.size() - 1) {
 					timer.cancel();
+					timer = null;
 				}
 			}
 		};
