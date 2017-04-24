@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.*;
+import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -43,9 +44,12 @@ public class SimulationPanel extends JPanel {
 	private boolean hasStarted;
 
 	private Font font;
-
-	private ArrayList<Point> points = new ArrayList<Point>();
+	
+	private ArrayList<Point2D.Double> points = new ArrayList<Point2D.Double>();
+	private ArrayList<Point> scaledPoints = new ArrayList<Point>();
 	private int index = 0;
+	
+	DecimalFormat fmt = new DecimalFormat("0.00");
 
 	double duration = flightDuration();
 	double tick;
@@ -102,7 +106,14 @@ public class SimulationPanel extends JPanel {
 		System.out.println("INDEX" + index);
 		
 		for(int i = 0; i <= index; i++) {
-			g2.fillOval(points.get(i).x, points.get(i).y, 4, 4);
+			g2.fillOval(scaledPoints.get(i).x, scaledPoints.get(i).y, 4, 4);
+			
+			if(i == index) {
+				String x = fmt.format(points.get(i).x);
+				String y = fmt.format(points.get(i).y);
+				
+				g2.drawString("(" + x + ", " + y + ")", scaledPoints.get(i).x, scaledPoints.get(i).y);
+			}
 		}
 
 		g2.setColor(Color.RED);
@@ -116,7 +127,10 @@ public class SimulationPanel extends JPanel {
 		g2.setFont(font);
 
 		g2.drawString("Y: " + fmt.format(getX(duration)) + " m", 10, 20);
-		g2.drawString("X: " + fmt.format(getX(duration)) + " m", getWidth() - 85, getHeight() - 10);
+		
+		int xTextWidth = g2.getFontMetrics().stringWidth("X: " + fmt.format(getX(duration)) + " m");
+		
+		g2.drawString("X: " + fmt.format(getX(duration)) + " m", getWidth() - xTextWidth - 20, getHeight() - 10);
 	}
 
 	public void simulate(double angle, double velocity, double height) {
@@ -133,12 +147,15 @@ public class SimulationPanel extends JPanel {
 		widthScale = (getWidth() - 2 * WIDTH_PADDING) / (getX(duration));
 
 		scale = Math.min(heightScale, widthScale);
-
+		
 		points.clear();
+		scaledPoints.clear();
 		index = 0;
 
 		for (double t = 0; t < duration; t += tick) {
-			points.add(new Point((int) (WIDTH_PADDING + getX(t) * scale),
+			points.add(new Point2D.Double(getX(t), getY(t)));
+			
+			scaledPoints.add(new Point((int) (WIDTH_PADDING + getX(t) * scale),
 					getHeight() - (int) (GROUND_HEIGHT + getY(t) * scale)));
 		}
 		
@@ -157,14 +174,15 @@ public class SimulationPanel extends JPanel {
 
 				index++;
 
-				if (index == points.size() - 1) {
+				if (index == scaledPoints.size() - 1) {
 					timer.cancel();
 					timer = null;
 				}
 			}
 		};
-
-		timer.schedule(myTask, 0, 2);
+		
+		System.out.println(tick * 1000);
+		timer.schedule(myTask, 0, (int)Math.ceil(tick * 1000));
 
 		repaint();
 	}
