@@ -121,9 +121,7 @@ public class SimulationPanel extends JPanel {
 		DecimalFormat fmt = new DecimalFormat("0.00");
 
 		g2.setColor(Color.BLACK);
-		
-		//g2.drawString("Y: " + fmt.format(highestY() * 1.2) + " m", 10, 20);
-		
+				
 		int xTextWidth = g2.getFontMetrics().stringWidth("X: " + fmt.format(getX(duration)) + " m");
 		
 		g2.drawString("X: " + fmt.format(getX(duration)) + " m", getWidth() - xTextWidth - 20, getHeight() - 10);
