@@ -1,13 +1,3 @@
-
-// Assignment: Honors Contract
-// Arizona State University CSE205
-// Name: Kaan Aksoy
-// StudentID: 1210619069
-// Lecture: T, Th 4:30 PM - 5:45 PM, Dr. Nakamura
-// Description: Class that represents the panel on the right of the GUI that displays
-//              the map and events that occur in the game. The panel is updated every 
-//              iteration of the game.
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -65,10 +55,6 @@ public class SimulationPanel extends JPanel {
 		setBackground(new Color(30, 144, 255));
 
 		font = new Font("Comic Sans", Font.BOLD, 16);
-
-		// Add the GameMouseListener to listen for mouse clicks and moves.
-		addMouseListener(new GameMouseListener());
-		addMouseMotionListener(new GameMouseListener());
 	}
 	
 	public void setControlsPanel(ControlsPanel panel) {
@@ -202,26 +188,5 @@ public class SimulationPanel extends JPanel {
 	private double flightDuration() {
 		return (-1 * velocity * Math.sin(angle)
 				- Math.sqrt(Math.pow(velocity * Math.sin(angle), 2) + 2 * 9.81 * height)) / (-9.81);
-	}
-
-	// Private inner class that is used to handle mouse presses and mouse
-	// movements in the GamePanel.
-	private class GameMouseListener extends MouseAdapter {
-
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseMoved(MouseEvent e) {
-
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-
-		}
 	}
 }

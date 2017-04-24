@@ -1,14 +1,3 @@
-// Assignment: Honors Contract
-// Arizona State University CSE205
-// Name: Kaan Aksoy
-// StudentID: 1210619069
-// Lecture: T, Th 4:30 PM - 5:45 PM, Dr. Nakamura
-// Description: Class that represents the GUI used to play the game.
-//              The GUI has a panel on the left for upgrading turrets,
-//              and a panel on the right to display the game.
-//              It also controls the timer used to update the game every 
-//              several millseconds.
-
 import java.awt.BorderLayout;
 import java.awt.Container;
 import javax.swing.JFrame;
@@ -26,7 +15,7 @@ public class GUI extends JFrame {
 	
 	public GUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Tower Defense");
+		setTitle("Projectile Motion Simulator (Kaan Aksoy)");
 		
 		//The GUI should not be resizable by the user.
 		setResizable(false);

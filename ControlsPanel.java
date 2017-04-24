@@ -1,13 +1,3 @@
-
-// Assignment: Honors Contract
-// Arizona State University CSE205
-// Name: Kaan Aksoy
-// StudentID: 1210619069
-// Lecture: T, Th 4:30 PM - 5:45 PM, Dr. Nakamura
-// Description: Class that represents the panel on the left of the GUI that the user
-//              can use to upgrade their turrets and to see how much money they have.
-//              The panel is updated every iteration of the game.
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -142,11 +132,11 @@ public class ControlsPanel extends JPanel {
 		
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Simulation Info"));
 		
-		distanceLabel = new JLabel("Distance Traveled: ");
+		distanceLabel = new JLabel("Distance Traveled: --");
 		
 		infoPanel.add(distanceLabel);
 		
-		timeLabel = new JLabel("Total Air Time: ");
+		timeLabel = new JLabel("Total Air Time: --");
 		
 		infoPanel.add(timeLabel);
 		
@@ -154,7 +144,7 @@ public class ControlsPanel extends JPanel {
 		
 		infoPanel.add(accelerationLabel);
 		
-		maxHeightLabel = new JLabel("Max Height: ");
+		maxHeightLabel = new JLabel("Max Height: --");
 		
 		infoPanel.add(maxHeightLabel);
 
@@ -187,8 +177,7 @@ public class ControlsPanel extends JPanel {
 			return "<html>The angle, velocity, and height must be numbers.</html>";
 		}
 	}
-
-	// Setter for gamePanel.
+	
 	public void setSimulationPanel(SimulationPanel panel) {
 		this.simulationPanel = panel;
 	}
