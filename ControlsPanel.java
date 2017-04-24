@@ -42,8 +42,10 @@ public class ControlsPanel extends JPanel {
 	private JTextField heightInput;
 
 	private JLabel warningLabel;
+	
 	private JLabel distanceLabel;
 	private JLabel timeLabel;
+	private JLabel maxHeightLabel;
 	private JLabel accelerationLabel;
 	
 	private SimulationPanel simulationPanel;
@@ -151,6 +153,10 @@ public class ControlsPanel extends JPanel {
 		accelerationLabel = new JLabel("Acceleration (g): 9.81 m/s^2");
 		
 		infoPanel.add(accelerationLabel);
+		
+		maxHeightLabel = new JLabel("Max Height: ");
+		
+		infoPanel.add(maxHeightLabel);
 
 		add(Box.createRigidArea(new Dimension(0, 30)));
 
@@ -187,10 +193,11 @@ public class ControlsPanel extends JPanel {
 		this.simulationPanel = panel;
 	}
 	
-	public void setSimulationInfo(double time, double distance) {
+	public void setSimulationInfo(double time, double distance, double maxHeight) {
 		DecimalFormat fmt = new DecimalFormat("0.00");
 		
 		distanceLabel.setText("Distance Traveled: " + fmt.format(distance) + "m");
 		timeLabel.setText("Total Air Time: " + fmt.format(time) + "s");
+		maxHeightLabel.setText("Max Height: " + fmt.format(maxHeight) + "m");
 	}
 }

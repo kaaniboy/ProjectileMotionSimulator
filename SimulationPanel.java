@@ -159,7 +159,7 @@ public class SimulationPanel extends JPanel {
 					getHeight() - (int) (GROUND_HEIGHT + getY(t) * scale)));
 		}
 		
-		controlsPanel.setSimulationInfo(duration, getX(duration));
+		controlsPanel.setSimulationInfo(duration, getX(duration), highestY());
 		
 		if(timer != null) {
 			timer.cancel();
