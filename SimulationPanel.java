@@ -77,12 +77,6 @@ public class SimulationPanel extends JPanel {
 		if (!hasStarted)
 			return;
 
-		System.out.printf("Biggest X: %f\n", getX(duration));
-		System.out.printf("Highest Y: %f\n", highestY());
-		System.out.printf("Duration: %f\n", duration);
-		System.out.printf("Width Scale: %f\n", widthScale);
-		System.out.printf("Height Scale: %f\n", heightScale);
-
 		g2.setColor(Color.GRAY);
 
 		if (height > 0) {
@@ -92,14 +86,12 @@ public class SimulationPanel extends JPanel {
 
 		g2.setColor(Color.BLACK);
 		
-		System.out.println("INDEX" + index);
-		
 		boolean displayedMaxY = false;
 		
 		for(int i = 0; i <= index; i++) {
 			g2.fillOval(scaledPoints.get(i).x, scaledPoints.get(i).y, 4, 4);
 			
-			if(!displayedMaxY && Math.abs(points.get(i).y - highestY()) < 0.0001) {
+			if(!displayedMaxY && Math.abs(points.get(i).y - highestY()) < 0.001) {
 				displayedMaxY = true;
 				g2.drawString("Y: " + fmt.format(points.get(i).y) + "m", scaledPoints.get(i).x - 10, scaledPoints.get(i).y - 10);
 
