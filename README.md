@@ -8,7 +8,7 @@ The simulator has the following functionality:
 2. Displays an animated simulation of the projectile as it flies through the air.
 3. Labels significant points in the projectile's motion (ie, its highest point).
 4. Provides information about the results of the simulation:
-  * Total air time.
-  * Total distance traveled.
-  * Maximum height of the projectile.
+   * Total air time.
+   * Total distance traveled.
+   * Maximum height of the projectile.
 
