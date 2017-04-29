@@ -14,5 +14,8 @@ __The simulator has the following functionality:__
    
 
 __Sample image of simulation:__
+
+[Video demonstration of simulation](https://drive.google.com/file/d/0B3iD8X1ziONrYnY2Y3g5QkZWc2M/view?usp=sharing)
+
 ![Simulation Image](http://i.imgur.com/XAv87cO.png)
 
